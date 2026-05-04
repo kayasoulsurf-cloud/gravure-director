@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // 追加したすべての要素（legwear, exposureなど）をstateに登録
     const state = {
-        people: '', face: '', bust: '', outfit: '', skin: '',
+        people: '', face: '', bust: '', outfit: '', legwear: '', exposure: '', skin: '',
         pose: '', expression: '', location: '', sexyMax: false, generating: false
     };
 
@@ -71,8 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const promptText = el.promptEditor.value;
         const seed = Math.floor(Math.random() * 1000000);
-        
-        // バグのある flux モデル指定を外し、確実に縦長(768x1152)になるデフォルトの高品質モデルを使用
+        // 縦長・高画質モデルを強制
         const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(promptText)}?width=768&height=1152&nologo=true&seed=${seed}`;
 
         try {
@@ -84,12 +84,12 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             const finalUrl = await imgLoad;
             
-            // 画像の表示スタイルを画面いっぱいの縦長に強制
+            // 画像を強制的に縦長で大きく表示
             el.resultImg.style.width = '100%';
             el.resultImg.style.maxHeight = '75vh';
             el.resultImg.style.objectFit = 'cover';
             el.resultImg.style.borderRadius = '12px';
-            
+
             el.resultImg.src = finalUrl;
             el.resultImg.classList.remove('hidden');
             saveToHistory(finalUrl);
@@ -143,19 +143,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function rebuildPrompt() {
-        // ★ 白人化を防ぐため「純日本人のグラビアアイドル」を先頭で極めて強く指定
+        // ★ 日本人強制指定
         const parts = ['masterpiece, photorealistic 8k, pure Japanese gravure idol, 100% Asian features, black hair, extremely beautiful Japanese face, highly detailed skin'];
         
         if (state.people) parts.push(state.people); else parts.push('1girl');
         if (state.face) parts.push(state.face);
         if (state.bust) parts.push(state.bust);
         if (state.outfit) parts.push(state.outfit);
+        if (state.legwear) parts.push(state.legwear);
+        if (state.exposure) parts.push(state.exposure);
         if (state.skin) parts.push(state.skin);
         if (state.pose) parts.push(state.pose);
         if (state.expression) parts.push(state.expression);
         if (state.location) parts.push(state.location);
         
-        if (state.sexyMax) parts.push('provocative atmosphere, seductive body, extremely revealing outfit, heavily oiled glowing skin, alluring expression, nsfw focus');
+        if (state.sexyMax) parts.push('provocative atmosphere, seductive body, extremely revealing outfit, heavily oiled glowing skin, alluring expression, uncensored, nsfw focus');
         
         if (el.promptEditor) el.promptEditor.value = parts.join(', ');
     }
