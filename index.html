@@ -4,21 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Edge Gravure Director</title>
-    <meta name="description" content="AI Gravure Photo Studio - スマホ対応プレミアムグラビア画像生成">
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#08080a">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
 <body>
     <div id="app" class="app-container">
         <div class="bg-glow"></div>
 
-        <!-- Header -->
         <header class="app-header">
             <div class="logo-area">
                 <span class="logo-icon">🎬</span>
@@ -32,7 +27,6 @@
             </div>
         </header>
 
-        <!-- 生成結果エリア -->
         <section class="result-area" id="result-area">
             <div class="result-placeholder" id="result-placeholder">
                 <div class="placeholder-icon">📸</div>
@@ -41,64 +35,63 @@
             <img id="result-image" class="result-image hidden" alt="Generated">
             <div id="loading-overlay" class="loading-overlay hidden">
                 <div class="spinner"></div>
-                <p>AIが最高の一枚を生成中...</p>
+                <p>AIが最高の一枚を撮影中...</p>
                 <p class="loading-sub">10〜20秒ほどお待ちください</p>
             </div>
         </section>
 
-        <!-- ★ 生成ボタン ★ -->
         <div class="generate-area">
-            <button id="btn-generate" class="btn-generate">
-                <span>🚀</span> 生成開始
-            </button>
-            <button id="btn-sexy-max" class="btn-sexy-max">
-                <span>🔥</span> SEXY MAX
-            </button>
+            <button id="btn-generate" class="btn-generate"><span>🚀</span> 生成開始</button>
+            <button id="btn-sexy-max" class="btn-sexy-max"><span>🔥</span> SEXY MAX</button>
         </div>
 
-        <!-- エラー表示 -->
         <div id="error-bar" class="error-bar hidden"></div>
 
-        <!-- コントロールタブ -->
         <div class="control-tabs">
             <button class="tab-link active" data-tab="tab-character">👩 人物</button>
             <button class="tab-link" data-tab="tab-outfit">👙 衣装</button>
             <button class="tab-link" data-tab="tab-pose">💃 ポーズ</button>
             <button class="tab-link" data-tab="tab-scene">🏖️ 状況</button>
-            <button class="tab-link" data-tab="tab-prompt">📝 呪文確認</button>
+            <button class="tab-link" data-tab="tab-prompt">📝 呪文</button>
         </div>
 
         <div class="tab-panels">
             <!-- 人物タブ -->
             <div class="tab-panel active" id="tab-character">
                 <div class="group">
+                    <label>人数</label>
+                    <div class="chip-group" data-key="people">
+                        <button class="chip" data-val="1girl, solo">1人</button>
+                        <button class="chip" data-val="2girls, pair of sexy women, interacting, standing together">2人（ペア）</button>
+                        <button class="chip" data-val="3girls, group of sexy women, idol group formation">グループ（3人以上）</button>
+                    </div>
+                </div>
+                <div class="group">
                     <label>顔の好み</label>
                     <div class="chip-group" data-key="face">
                         <button class="chip" data-val="elegant and refined beauty, sharp jawline, high cheekbones">綺麗系美人</button>
                         <button class="chip" data-val="cute adult face, charming warm smile, round eyes">大人可愛い</button>
-                        <button class="chip" data-val="cool mysterious look, sharp eyes, aloof expression">クール美人</button>
+                        <button class="chip" data-val="gyaru style makeup, light brown hair, confident smile">ギャル系</button>
                         <button class="chip" data-val="sultry seductive face, bedroom eyes, full lips">色気顔</button>
-                        <button class="chip" data-val="high-fashion model face, defined cheekbones, confident gaze">モデル系</button>
-                        <button class="chip" data-val="innocent yet seductive, playful smirk, mischievous eyes">小悪魔系</button>
                     </div>
                 </div>
                 <div class="group">
-                    <label>メイク</label>
-                    <div class="chip-group" data-key="makeup">
-                        <button class="chip" data-val="dewy glossy skin, wet-look makeup">艶肌メイク</button>
-                        <button class="chip" data-val="dramatic smokey eye makeup, seductive gaze">目元強め</button>
-                        <button class="chip" data-val="glossy wet cherry-red lips, slightly parted mouth">艶リップ</button>
-                        <button class="chip" data-val="post-bath look, flushed rosy cheeks, no makeup">湯上がり風</button>
-                        <button class="chip" data-val="natural radiant glow, magazine cover beauty">ナチュラル</button>
+                    <label>表情</label>
+                    <div class="chip-group" data-key="expression">
+                        <button class="chip" data-val="seductive alluring gaze, looking directly at viewer">誘う視線</button>
+                        <button class="chip" data-val="mouth slightly open, heavy breathing expression, flushed cheeks">吐息顔</button>
+                        <button class="chip" data-val="blushing shyly, slightly embarrassed, biting lip">恥じらい</button>
+                        <button class="chip" data-val="looking over shoulder, seductive side glance">流し目</button>
                     </div>
                 </div>
                 <div class="group">
-                    <label>バストサイズ</label>
+                    <label>体型・バストサイズ</label>
                     <div class="chip-group" data-key="bust">
                         <button class="chip" data-val="slim athletic body, small firm breasts">スレンダー</button>
                         <button class="chip" data-val="beautiful proportional breasts, toned body">美乳</button>
                         <button class="chip" data-val="large attractive breasts, hourglass figure">巨乳</button>
-                        <button class="chip" data-val="very large heavy breasts, voluptuous curvy body">爆乳</button>
+                        <button class="chip" data-val="very large heavy breasts, voluminous cleavage">爆乳</button>
+                        <button class="chip" data-val="thick fleshy thighs, wide hips, soft curvy body">ムチムチ太もも</button>
                     </div>
                 </div>
             </div>
@@ -106,24 +99,34 @@
             <!-- 衣装タブ -->
             <div class="tab-panel" id="tab-outfit">
                 <div class="group">
-                    <label>衣装（攻めライン）</label>
+                    <label>グラビア水着・下着</label>
                     <div class="chip-group" data-key="outfit">
                         <button class="chip" data-val="extremely tiny micro bikini, barely covering, string ties">マイクロビキニ</button>
-                        <button class="chip" data-val="extreme high-leg one-piece swimsuit, showing entire hip line">極限ハイレグ</button>
-                        <button class="chip" data-val="thin string bikini with lace-up details, minimal coverage">紐ビキニ</button>
-                        <button class="chip" data-val="sheer lace lingerie style outfit, fashion photography">ランジェリー風</button>
-                        <button class="chip" data-val="tight white t-shirt over bikini, slightly wet and clinging to skin">濡れ白T</button>
-                        <button class="chip" data-val="glossy race queen bodysuit, high-cut legs">レースクイーン</button>
-                        <button class="chip" data-val="barely-there thong bikini, T-back style, showing curves">Tバック水着</button>
+                        <button class="chip" data-val="micro thong, G-string, revealing buttocks, T-back">Tバック</button>
+                        <button class="chip" data-val="extreme high-leg one-piece swimsuit, showing hip line">極限ハイレグ</button>
+                        <button class="chip" data-val="tight white t-shirt over bikini, completely wet and clinging to skin">濡れ白Tシャツ</button>
+                        <button class="chip" data-val="sheer black lace lingerie, garter belt, extremely sexy">レースランジェリー</button>
+                    </div>
+                </div>
+                <div class="group">
+                    <label>攻め衣装・コスプレ</label>
+                    <div class="chip-group" data-key="outfit">
+                        <button class="chip" data-val="Cyberjapan dancers style, flashy sexy glowing neon bikini, energetic party vibe, feather accessories">Cyberjapan風</button>
+                        <button class="chip" data-val="glossy race queen bodysuit, extreme high-cut legs, sexy zipper">レースクイーン</button>
+                        <button class="chip" data-val="sexy cheerleader outfit, micro pleated skirt, underboob crop top">チアリーダー</button>
+                        <button class="chip" data-val="fully naked, completely nude, zero clothes, uncensored">全裸</button>
+                        <button class="chip" data-val="topless, bare breasts, exposed chest">トップレス</button>
+                        <button class="chip" data-val="topless, breasts covered only by hands, hiding cleavage shyly">手ブラ</button>
+                        <button class="chip" data-val="wearing only a kitchen apron, bare back, side boobs visible">裸エプロン</button>
+                        <button class="chip" data-val="Japanese Oiran, luxurious kimono slipping off shoulders, kanzashi hairpins, deep cleavage">花魁</button>
                     </div>
                 </div>
                 <div class="group">
                     <label>肌の質感</label>
                     <div class="chip-group" data-key="skin">
-                        <button class="chip" data-val="oiled glistening sweaty skin, body oil, shimmering highlights">オイル艶肌</button>
-                        <button class="chip" data-val="water droplets on skin, wet messy hair, fresh from pool">濡れ肌・濡れ髪</button>
+                        <button class="chip" data-val="completely drenched in sweat, heavy body oil, shimmering highlights">汗だくオイル艶肌</button>
+                        <button class="chip" data-val="water droplets on skin, wet messy hair, fresh from pool">濡れ肌・水しぶき</button>
                         <button class="chip" data-val="distinct bikini tan lines on golden sun-kissed skin">日焼け跡</button>
-                        <button class="chip" data-val="flawless porcelain smooth skin, ultra detailed texture">美白肌</button>
                     </div>
                 </div>
             </div>
@@ -131,26 +134,14 @@
             <!-- ポーズタブ -->
             <div class="tab-panel" id="tab-pose">
                 <div class="group">
-                    <label>ポーズ</label>
+                    <label>アクション・ポーズ</label>
                     <div class="chip-group" data-key="pose">
+                        <button class="chip" data-val="sitting with M-shaped legs, spreading legs wide, extremely provocative pose">M字開脚</button>
+                        <button class="chip" data-val="on all fours, doggy style pose, arched back, looking back at camera">四つん這い</button>
+                        <button class="chip" data-val="twerking pose, bending over shaking hips, emphasizing buttocks">トゥワーク</button>
+                        <button class="chip" data-val="straddling a chair, riding pose, facing viewer, spreading legs">またがりポーズ</button>
+                        <button class="chip" data-val="leaning forward towards camera, deep cleavage view, arms pressing chest">前屈み谷間</button>
                         <button class="chip" data-val="kneeling on bed, looking back over shoulder, showing back and hip line">膝立ち振り返り</button>
-                        <button class="chip" data-val="lying on stomach on white bed sheets, chin resting on hands, legs up">うつ伏せ寝そべり</button>
-                        <button class="chip" data-val="leaning forward towards camera, deep cleavage view, arms pressing chest together">前屈み谷間</button>
-                        <button class="chip" data-val="sitting with legs crossed showing thigh, hand on knee">脚組み座り</button>
-                        <button class="chip" data-val="standing with back arched, pushing hips back, emphasizing curves">腰反らし</button>
-                        <button class="chip" data-val="arms stretched overhead, full body line visible, stretching pose">背伸び全身</button>
-                        <button class="chip" data-val="lying on back, hair spread on pillow, looking up at camera">仰向け見上げ</button>
-                    </div>
-                </div>
-                <div class="group">
-                    <label>表情・視線</label>
-                    <div class="chip-group" data-key="expression">
-                        <button class="chip" data-val="mouth slightly open, heavy breathing expression, flushed">吐息顔</button>
-                        <button class="chip" data-val="half-closed sultry eyes, dreamy intoxicated gaze">とろん目</button>
-                        <button class="chip" data-val="blushing flushed face, looking embarrassed but inviting">火照り顔</button>
-                        <button class="chip" data-val="fingertip gently touching lower lip, teasing seductive gaze at camera">指先リップ</button>
-                        <button class="chip" data-val="intense passionate gaze directly at camera, burning desire in eyes">熱い視線</button>
-                        <button class="chip" data-val="biting lower lip gently, playful naughty expression">唇噛み</button>
                     </div>
                 </div>
             </div>
@@ -158,23 +149,22 @@
             <!-- 状況タブ -->
             <div class="tab-panel" id="tab-scene">
                 <div class="group">
-                    <label>ロケーション</label>
+                    <label>パーティ・パリピ系</label>
                     <div class="chip-group" data-key="location">
-                        <button class="chip" data-val="luxury five-star hotel suite, king size bed, dim warm lighting">高級ホテル</button>
-                        <button class="chip" data-val="tropical resort infinity pool, sunset golden hour, palm trees">南国リゾート</button>
-                        <button class="chip" data-val="private glass-walled shower room, steam and water droplets">シャワールーム</button>
-                        <button class="chip" data-val="beautiful tropical beach at sunset, waves, warm golden light">夕暮れビーチ</button>
-                        <button class="chip" data-val="bright morning bedroom, white sheets, sunlight streaming through window">朝のベッド</button>
-                        <button class="chip" data-val="rooftop jacuzzi at night, city lights in background, bubbles">夜景ジャグジー</button>
+                        <button class="chip" data-val="outdoor EDM music festival, foam party, neon lights, crowd, splashing water">EDMフェス(泡)</button>
+                        <button class="chip" data-val="luxury yacht deck party, VIP night pool, champagne">豪華クルーザー</button>
+                        <button class="chip" data-val="dark night club stage, neon lights, party atmosphere">クラブステージ</button>
                     </div>
                 </div>
                 <div class="group">
-                    <label>画質・スタイル</label>
-                    <div class="chip-group" data-key="quality">
-                        <button class="chip selected" data-val="photorealistic, ultra high resolution 8K, cinematic dramatic lighting, shallow depth of field">超実写8K</button>
-                        <button class="chip" data-val="Japanese gravure magazine cover style, studio professional lighting">雑誌表紙風</button>
-                        <button class="chip" data-val="analog film grain, warm vintage tones, nostalgic atmosphere">フィルム風</button>
-                        <button class="chip" data-val="high fashion editorial photography, dramatic shadows, Vogue style">モード誌風</button>
+                    <label>密室スリル系</label>
+                    <div class="chip-group" data-key="location">
+                        <button class="chip" data-val="crowded commuter train interior, pressed against the door, secretly exposed">満員電車</button>
+                        <button class="chip" data-val="empty train car at midnight, sitting on long seat, cold fluorescent lighting">深夜の終電</button>
+                        <button class="chip" data-val="cramped karaoke room, dim neon lighting, leather sofa">カラオケの個室</button>
+                        <button class="chip" data-val="cheap love hotel room, pink and purple neon lighting, mirrored ceiling">ラブホテル</button>
+                        <button class="chip" data-val="cramped gym locker room, metal lockers, narrow space">狭い更衣室</button>
+                        <button class="chip" data-val="cramped glass shower cubicle, heavy steam, water droplets on glass">シャワールーム</button>
                     </div>
                 </div>
             </div>
@@ -185,11 +175,10 @@
                     <label>内部で生成される英語の呪文（自動）</label>
                     <textarea id="prompt-editor" class="prompt-editor" rows="8" readonly></textarea>
                 </div>
-                <button id="btn-copy-prompt" class="btn-copy">📋 呪文をコピー</button>
             </div>
         </div>
 
-        <!-- 履歴モーダル -->
+        <!-- Modals -->
         <div id="history-modal" class="modal hidden">
             <div class="modal-backdrop" data-close="history-modal"></div>
             <div class="modal-content">
@@ -197,14 +186,11 @@
                     <h3>🖼️ 生成履歴</h3>
                     <button class="icon-btn" data-close-btn="history-modal">✕</button>
                 </div>
-                <div id="history-grid" class="history-grid">
-                    <p class="text-muted">まだ画像がありません</p>
-                </div>
+                <div id="history-grid" class="history-grid"></div>
                 <button id="btn-clear-history" class="btn-clear-history">🗑 履歴をクリア</button>
             </div>
         </div>
 
-        <!-- 画像フルスクリーン -->
         <div id="fullscreen-modal" class="modal hidden">
             <div class="modal-backdrop" data-close="fullscreen-modal"></div>
             <div class="fullscreen-img-wrap">
@@ -213,11 +199,8 @@
                 <button id="btn-download" class="fullscreen-download">💾 保存</button>
             </div>
         </div>
-
-        <!-- Toast -->
         <div id="toast-container"></div>
     </div>
-
-    <script src="app.js?v=5"></script>
+    <script src="app.js?v=8"></script>
 </body>
 </html>
