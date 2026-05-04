@@ -203,12 +203,12 @@
                     <button class="icon-btn" data-close-btn="settings-modal">✕</button>
                 </div>
                 <div class="settings-body">
-                    <p class="settings-desc">Gemini APIキーを入力してください。<br>キーはこのデバイスのブラウザにのみ保存されます。</p>
+                    <p class="settings-desc">Gemini APIキーを入力してください。<br>キーはこのデバイスのブラウザにのみ保存され、外部には送信されません。</p>
                     <div class="group">
                         <label>Gemini API Key</label>
                         <input type="password" id="api-key-input" class="text-input" placeholder="AIzaSy...">
                     </div>
-                    <a href="https://aistudio.google.com/app/apikey" target="_blank" class="settings-link">🔑 APIキーを無料で取得 →</a>
+                    <a href="https://aistudio.google.com/app/apikey" target="_blank" class="settings-link">🔑 Google AI Studio でAPIキーを取得 →</a>
                     <button id="btn-save-key" class="btn-save-key">💾 保存する</button>
                     <div id="key-status" class="key-status"></div>
                 </div>
@@ -224,7 +224,7 @@
                     <button class="icon-btn" data-close-btn="history-modal">✕</button>
                 </div>
                 <div id="history-grid" class="history-grid">
-                    <p class="text-muted">まだ画像がありません</p>
+                    <p class="text-muted">まだ画像が生成されていません</p>
                 </div>
                 <button id="btn-clear-history" class="btn-clear-history">🗑 履歴をクリア</button>
             </div>
@@ -244,6 +244,6 @@
         <div id="toast-container"></div>
     </div>
 
-    <script src="app.js?v=3"></script>
+    <script src="app.js?v=4"></script>
 </body>
 </html>
