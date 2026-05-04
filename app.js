@@ -71,7 +71,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const promptText = el.promptEditor.value;
         const seed = Math.floor(Math.random() * 1000000);
-        const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(promptText)}?width=768&height=1152&nologo=true&seed=${seed}&model=flux`;
+        
+        // バグのある flux モデル指定を外し、確実に縦長(768x1152)になるデフォルトの高品質モデルを使用
+        const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(promptText)}?width=768&height=1152&nologo=true&seed=${seed}`;
 
         try {
             const imgLoad = new Promise((resolve, reject) => {
@@ -81,6 +83,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 img.src = imageUrl;
             });
             const finalUrl = await imgLoad;
+            
+            // 画像の表示スタイルを画面いっぱいの縦長に強制
+            el.resultImg.style.width = '100%';
+            el.resultImg.style.maxHeight = '75vh';
+            el.resultImg.style.objectFit = 'cover';
+            el.resultImg.style.borderRadius = '12px';
+            
             el.resultImg.src = finalUrl;
             el.resultImg.classList.remove('hidden');
             saveToHistory(finalUrl);
@@ -134,8 +143,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function rebuildPrompt() {
-        const parts = ['masterpiece, best quality, ultra photorealistic, extremely beautiful Japanese adult women, Asian, real human'];
-        if (state.people) parts.push(state.people); else parts.push('1girl, solo');
+        // ★ 白人化を防ぐため「純日本人のグラビアアイドル」を先頭で極めて強く指定
+        const parts = ['masterpiece, photorealistic 8k, pure Japanese gravure idol, 100% Asian features, black hair, extremely beautiful Japanese face, highly detailed skin'];
+        
+        if (state.people) parts.push(state.people); else parts.push('1girl');
         if (state.face) parts.push(state.face);
         if (state.bust) parts.push(state.bust);
         if (state.outfit) parts.push(state.outfit);
