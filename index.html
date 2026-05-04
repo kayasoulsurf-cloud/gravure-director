@@ -49,7 +49,7 @@
 
         <div class="control-tabs">
             <button class="tab-link active" data-tab="tab-character">👩 人物</button>
-            <button class="tab-link" data-tab="tab-outfit">👙 衣装</button>
+            <button class="tab-link" data-tab="tab-outfit">👙 衣装・露出</button>
             <button class="tab-link" data-tab="tab-pose">💃 ポーズ</button>
             <button class="tab-link" data-tab="tab-scene">🏖️ 状況</button>
             <button class="tab-link" data-tab="tab-prompt">📝 呪文</button>
@@ -96,29 +96,40 @@
                 </div>
             </div>
 
-            <!-- 衣装タブ -->
+            <!-- 衣装・露出タブ -->
             <div class="tab-panel" id="tab-outfit">
                 <div class="group">
-                    <label>グラビア水着・下着</label>
-                    <div class="chip-group" data-key="outfit">
-                        <button class="chip" data-val="extremely tiny micro bikini, barely covering, string ties">マイクロビキニ</button>
-                        <button class="chip" data-val="micro thong, G-string, revealing buttocks, T-back">Tバック</button>
-                        <button class="chip" data-val="extreme high-leg one-piece swimsuit, showing hip line">極限ハイレグ</button>
-                        <button class="chip" data-val="tight white t-shirt over bikini, completely wet and clinging to skin">濡れ白Tシャツ</button>
-                        <button class="chip" data-val="sheer black lace lingerie, garter belt, extremely sexy">レースランジェリー</button>
+                    <label>露出度・局部（限界突破）</label>
+                    <div class="chip-group" data-key="exposure">
+                        <button class="chip" data-val="barely covered, nip slip, extreme cameltoe, clothes about to fall off, teasing">見えそうで見えない</button>
+                        <button class="chip" data-val="strategic coverage, genitals covered by hands, hiding breasts with arms">手や物で隠す</button>
+                        <button class="chip" data-val="cameltoe, extremely tight crotch, panty outline">極度の食い込み</button>
+                        <button class="chip" data-val="fully topless, bare breasts, visible nipples, erect nipples">胸の完全露出</button>
+                        <button class="chip" data-val="bottomless, completely naked crotch, exposed pussy, uncensored">下半身の完全露出</button>
+                        <button class="chip" data-val="fully naked, full frontal nude, uncensored genitals, spreading">完全全裸・無修正</button>
                     </div>
                 </div>
                 <div class="group">
-                    <label>攻め衣装・コスプレ</label>
+                    <label>脚・足元</label>
+                    <div class="chip-group" data-key="legwear">
+                        <button class="chip" data-val="beautiful bare legs, smooth skin, barefoot, beautiful toes">生足（裸足）</button>
+                        <button class="chip" data-val="sheer black pantyhose, beautiful long legs">黒ストッキング</button>
+                        <button class="chip" data-val="black fishnet tights, sexy thighs">網タイツ</button>
+                        <button class="chip" data-val="thigh-high socks, zettai ryouiki, bare thighs">ニーハイ</button>
+                        <button class="chip" data-val="tight socks cutting into thighs, skindentation, fleshy thighs">太ももの肉の食い込み</button>
+                        <button class="chip" data-val="extreme high heels, stiletto heels, emphasizing leg line">ピンヒール</button>
+                    </div>
+                </div>
+                <div class="group">
+                    <label>グラビア衣装・コスプレ</label>
                     <div class="chip-group" data-key="outfit">
-                        <button class="chip" data-val="Cyberjapan dancers style, flashy sexy glowing neon bikini, energetic party vibe, feather accessories">Cyberjapan風</button>
+                        <button class="chip" data-val="Cyberjapan dancers style, flashy sexy glowing neon bikini, energetic party vibe">Cyberjapan風</button>
                         <button class="chip" data-val="glossy race queen bodysuit, extreme high-cut legs, sexy zipper">レースクイーン</button>
-                        <button class="chip" data-val="sexy cheerleader outfit, micro pleated skirt, underboob crop top">チアリーダー</button>
-                        <button class="chip" data-val="fully naked, completely nude, zero clothes, uncensored">全裸</button>
-                        <button class="chip" data-val="topless, bare breasts, exposed chest">トップレス</button>
-                        <button class="chip" data-val="topless, breasts covered only by hands, hiding cleavage shyly">手ブラ</button>
+                        <button class="chip" data-val="extremely tiny micro bikini, barely covering, string ties">マイクロビキニ</button>
+                        <button class="chip" data-val="micro thong, G-string, revealing buttocks, T-back">Tバック</button>
+                        <button class="chip" data-val="tight white t-shirt over bikini, completely wet and clinging to skin">濡れ白Tシャツ</button>
                         <button class="chip" data-val="wearing only a kitchen apron, bare back, side boobs visible">裸エプロン</button>
-                        <button class="chip" data-val="Japanese Oiran, luxurious kimono slipping off shoulders, kanzashi hairpins, deep cleavage">花魁</button>
+                        <button class="chip" data-val="Japanese Oiran, luxurious kimono slipping off shoulders, kanzashi hairpins">花魁</button>
                     </div>
                 </div>
                 <div class="group">
@@ -178,7 +189,6 @@
             </div>
         </div>
 
-        <!-- Modals -->
         <div id="history-modal" class="modal hidden">
             <div class="modal-backdrop" data-close="history-modal"></div>
             <div class="modal-content">
@@ -201,6 +211,8 @@
         </div>
         <div id="toast-container"></div>
     </div>
-    <script src="app.js?v=8"></script>
+    
+    <!-- キャッシュを強制回避します -->
+    <script src="app.js?v=20"></script>
 </body>
 </html>
