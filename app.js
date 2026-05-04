@@ -1,34 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
     const state = {
-        face: '', makeup: '', bust: '', outfit: '', skin: '',
-        pose: '', expression: '', location: '',
-        quality: 'photorealistic, ultra high resolution 8K, cinematic dramatic lighting, shallow depth of field',
-        sexyMax: false, generating: false
+        people: '', face: '', bust: '', outfit: '', skin: '',
+        pose: '', expression: '', location: '', sexyMax: false, generating: false
     };
 
     const STORAGE_KEY_HISTORY = 'egdirector_history';
     const $ = id => document.getElementById(id);
     const el = {
-        resultImg:      $('result-image'),
-        placeholder:    $('result-placeholder'),
-        loading:        $('loading-overlay'),
-        errorBar:       $('error-bar'),
-        btnGenerate:    $('btn-generate'),
-        btnSexyMax:     $('btn-sexy-max'),
-        btnHistory:     $('btn-history'),
-        historyModal:   $('history-modal'),
-        fullscreenModal:$('fullscreen-modal'),
-        fullscreenImg:  $('fullscreen-img'),
-        btnDownload:    $('btn-download'),
-        historyGrid:    $('history-grid'),
-        btnClearHist:   $('btn-clear-history'),
-        promptEditor:   $('prompt-editor'),
-        settingsModal:  $('settings-modal'),
-        toastContainer: $('toast-container')
+        resultImg: $('result-image'), placeholder: $('result-placeholder'), loading: $('loading-overlay'),
+        errorBar: $('error-bar'), btnGenerate: $('btn-generate'), btnSexyMax: $('btn-sexy-max'),
+        btnHistory: $('btn-history'), historyModal: $('history-modal'), fullscreenModal: $('fullscreen-modal'),
+        fullscreenImg: $('fullscreen-img'), btnDownload: $('btn-download'), historyGrid: $('history-grid'),
+        btnClearHist: $('btn-clear-history'), promptEditor: $('prompt-editor'), toastContainer: $('toast-container')
     };
-
-    // API設定画面はもう不要なので完全に隠します
-    if (el.settingsModal) el.settingsModal.style.display = 'none';
 
     document.querySelectorAll('.tab-link').forEach(link => {
         link.addEventListener('click', () => {
@@ -79,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function generate() {
         state.generating = true;
         el.btnGenerate.disabled = true;
-        el.btnGenerate.innerHTML = '<span>⏳</span> 画像生成中...';
+        el.btnGenerate.innerHTML = '<span>⏳</span> 撮影中...';
         el.placeholder.classList.add('hidden');
         el.resultImg.classList.add('hidden');
         el.loading.classList.remove('hidden');
@@ -87,9 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const promptText = el.promptEditor.value;
         const seed = Math.floor(Math.random() * 1000000);
-        
-        // 無料・無制限の新しい画像生成APIを使用（APIキー不要）
-        const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(promptText)}?width=768&height=1152&nologo=true&seed=${seed}`;
+        const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(promptText)}?width=768&height=1152&nologo=true&seed=${seed}&model=flux`;
 
         try {
             const imgLoad = new Promise((resolve, reject) => {
@@ -98,14 +80,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 img.onerror = () => reject(new Error('画像の生成に失敗しました'));
                 img.src = imageUrl;
             });
-
             const finalUrl = await imgLoad;
-
             el.resultImg.src = finalUrl;
             el.resultImg.classList.remove('hidden');
             saveToHistory(finalUrl);
-            toast('✨ 画像の生成が完了しました！');
-
+            toast('✨ 撮影が完了しました！');
         } catch (err) {
             el.errorBar.textContent = '⚠️ ' + err.message;
             el.errorBar.classList.remove('hidden');
@@ -150,30 +129,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    el.btnDownload.addEventListener('click', async () => {
-        const src = el.fullscreenImg.src;
-        if (!src) return;
-        const link = document.createElement('a');
-        link.href = src;
-        link.download = `gravure_${Date.now()}.jpg`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        toast('💾 ダウンロードを開始しました');
+    el.btnDownload.addEventListener('click', () => {
+        toast('💡 画像を【長押し】して保存してください');
     });
 
     function rebuildPrompt() {
-        const parts = ['masterpiece, best quality, photorealistic, 1girl, solo, real human, age 25+'];
+        const parts = ['masterpiece, best quality, ultra photorealistic, extremely beautiful Japanese adult women, Asian, real human'];
+        if (state.people) parts.push(state.people); else parts.push('1girl, solo');
         if (state.face) parts.push(state.face);
-        if (state.makeup) parts.push(state.makeup);
         if (state.bust) parts.push(state.bust);
         if (state.outfit) parts.push(state.outfit);
         if (state.skin) parts.push(state.skin);
         if (state.pose) parts.push(state.pose);
         if (state.expression) parts.push(state.expression);
         if (state.location) parts.push(state.location);
-        if (state.quality) parts.push(state.quality);
-        if (state.sexyMax) parts.push('provocative atmosphere, seductive body, extremely revealing outfit, oily skin, alluring expression');
+        
+        if (state.sexyMax) parts.push('provocative atmosphere, seductive body, extremely revealing outfit, heavily oiled glowing skin, alluring expression, nsfw focus');
+        
         if (el.promptEditor) el.promptEditor.value = parts.join(', ');
     }
 
