@@ -29,7 +29,6 @@
             </div>
             <div class="header-right">
                 <button id="btn-history" class="icon-btn" title="生成履歴">🖼️</button>
-                <button id="btn-settings" class="icon-btn" title="設定">⚙️</button>
             </div>
         </header>
 
@@ -43,7 +42,7 @@
             <div id="loading-overlay" class="loading-overlay hidden">
                 <div class="spinner"></div>
                 <p>AIが最高の一枚を生成中...</p>
-                <p class="loading-sub">10〜30秒ほどお待ちください</p>
+                <p class="loading-sub">10〜20秒ほどお待ちください</p>
             </div>
         </section>
 
@@ -66,7 +65,7 @@
             <button class="tab-link" data-tab="tab-outfit">👙 衣装</button>
             <button class="tab-link" data-tab="tab-pose">💃 ポーズ</button>
             <button class="tab-link" data-tab="tab-scene">🏖️ 状況</button>
-            <button class="tab-link" data-tab="tab-prompt">📝 プロンプト</button>
+            <button class="tab-link" data-tab="tab-prompt">📝 呪文確認</button>
         </div>
 
         <div class="tab-panels">
@@ -183,35 +182,10 @@
             <!-- プロンプトタブ -->
             <div class="tab-panel" id="tab-prompt">
                 <div class="group">
-                    <label>現在のプロンプト（編集可）</label>
-                    <textarea id="prompt-editor" class="prompt-editor" rows="8" placeholder="ここにプロンプトが表示されます..."></textarea>
+                    <label>内部で生成される英語の呪文（自動）</label>
+                    <textarea id="prompt-editor" class="prompt-editor" rows="8" readonly></textarea>
                 </div>
-                <div class="group">
-                    <label>ネガティブプロンプト</label>
-                    <textarea id="negative-editor" class="prompt-editor" rows="4" readonly>(low quality, worst quality:1.4), (bad anatomy:1.2), (cartoon, anime, illustration, 3d, render:1.4), (underaged, child:1.5), (nipples, genitals:1.6), (nude, naked:1.6)</textarea>
-                </div>
-                <button id="btn-copy-prompt" class="btn-copy">📋 プロンプトをコピー</button>
-            </div>
-        </div>
-
-        <!-- 設定モーダル -->
-        <div id="settings-modal" class="modal hidden">
-            <div class="modal-backdrop" data-close="settings-modal"></div>
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3>⚙️ API設定</h3>
-                    <button class="icon-btn" data-close-btn="settings-modal">✕</button>
-                </div>
-                <div class="settings-body">
-                    <p class="settings-desc">Gemini APIキーを入力してください。<br>キーはこのデバイスのブラウザにのみ保存され、外部には送信されません。</p>
-                    <div class="group">
-                        <label>Gemini API Key</label>
-                        <input type="password" id="api-key-input" class="text-input" placeholder="AIzaSy...">
-                    </div>
-                    <a href="https://aistudio.google.com/app/apikey" target="_blank" class="settings-link">🔑 Google AI Studio でAPIキーを取得 →</a>
-                    <button id="btn-save-key" class="btn-save-key">💾 保存する</button>
-                    <div id="key-status" class="key-status"></div>
-                </div>
+                <button id="btn-copy-prompt" class="btn-copy">📋 呪文をコピー</button>
             </div>
         </div>
 
@@ -224,7 +198,7 @@
                     <button class="icon-btn" data-close-btn="history-modal">✕</button>
                 </div>
                 <div id="history-grid" class="history-grid">
-                    <p class="text-muted">まだ画像が生成されていません</p>
+                    <p class="text-muted">まだ画像がありません</p>
                 </div>
                 <button id="btn-clear-history" class="btn-clear-history">🗑 履歴をクリア</button>
             </div>
@@ -244,6 +218,6 @@
         <div id="toast-container"></div>
     </div>
 
-    <script src="app.js?v=4"></script>
+    <script src="app.js?v=5"></script>
 </body>
 </html>
