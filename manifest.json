@@ -1,0 +1,10 @@
+{
+    "name": "Edge Gravure Director",
+    "short_name": "Gravure AI",
+    "description": "AI Gravure Photo Studio",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#08080a",
+    "theme_color": "#08080a",
+    "icons": []
+}
