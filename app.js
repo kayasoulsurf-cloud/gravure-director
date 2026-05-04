@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const STORAGE_KEY_APIKEY = 'egdirector_apikey';
     const STORAGE_KEY_HISTORY = 'egdirector_history';
-    const GEMINI_MODEL = 'gemini-2.0-flash-exp';
+    const GEMINI_MODEL = 'gemini-1.5-flash';
 
     // ── DOM ──
     const $ = id => document.getElementById(id);
@@ -45,7 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (savedKey) {
         el.apiKeyInput.value = savedKey;
     } else {
-        // 初回アクセス時は設定を開く
         setTimeout(() => el.settingsModal.classList.remove('hidden'), 500);
     }
 
@@ -108,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => el.settingsModal.classList.add('hidden'), 800);
     });
 
-    // ── Modal Close Logic ──
+    // ── Modal Close ──
     document.querySelectorAll('[data-close]').forEach(backdrop => {
         backdrop.addEventListener('click', () => {
             $(backdrop.dataset.close).classList.add('hidden');
@@ -130,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const apiKey = localStorage.getItem(STORAGE_KEY_APIKEY);
         if (!apiKey) {
             el.settingsModal.classList.remove('hidden');
-            toast('⚠️ APIキーを先に設定してください');
+            toast('⚠️ APIキーを設定してください');
             return;
         }
 
@@ -177,8 +176,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         el.resultImg.src = dataUrl;
                         el.resultImg.classList.remove('hidden');
                         imageFound = true;
-
-                        // 履歴に保存
                         saveToHistory(dataUrl);
                         toast('✨ 生成完了！');
                         break;
@@ -186,15 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            if (!imageFound) {
-                let textResponse = '';
-                if (data.candidates?.[0]?.content?.parts) {
-                    for (const part of data.candidates[0].content.parts) {
-                        if (part.text) textResponse += part.text;
-                    }
-                }
-                throw new Error(textResponse || '画像が生成されませんでした。設定を変えて再度お試しください。');
-            }
+            if (!imageFound) throw new Error('画像が生成されませんでした。設定を変えて再度お試しください。');
         } catch (err) {
             console.error('Generation error:', err);
             el.errorBar.textContent = '⚠️ ' + (err.message || 'エラーが発生しました');
@@ -208,29 +197,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // ── History (localStorage) ──
     function saveToHistory(dataUrl) {
         try {
             let history = JSON.parse(localStorage.getItem(STORAGE_KEY_HISTORY) || '[]');
             history.unshift({ dataUrl, timestamp: Date.now() });
-            // 最新20件を保持（容量対策）
             if (history.length > 20) history = history.slice(0, 20);
-            try {
-                localStorage.setItem(STORAGE_KEY_HISTORY, JSON.stringify(history));
-            } catch (e) {
-                // 容量超過時は古いのを消す
-                history = history.slice(0, 5);
-                localStorage.setItem(STORAGE_KEY_HISTORY, JSON.stringify(history));
-            }
-        } catch (e) {
-            console.warn('履歴保存エラー:', e);
-        }
+            localStorage.setItem(STORAGE_KEY_HISTORY, JSON.stringify(history));
+        } catch (e) { console.warn('履歴保存エラー:', e); }
     }
 
     function loadHistory() {
-        try {
-            return JSON.parse(localStorage.getItem(STORAGE_KEY_HISTORY) || '[]');
-        } catch { return []; }
+        try { return JSON.parse(localStorage.getItem(STORAGE_KEY_HISTORY) || '[]'); }
+        catch { return []; }
     }
 
     el.btnHistory.addEventListener('click', () => {
@@ -240,25 +218,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 `<img src="${item.dataUrl}" alt="Generated ${i + 1}" data-idx="${i}" loading="lazy">`
             ).join('');
             el.historyGrid.querySelectorAll('img').forEach(img => {
-                img.addEventListener('click', () => {
-                    showFullscreen(img.src);
-                });
+                img.addEventListener('click', () => showFullscreen(img.src));
             });
         } else {
-            el.historyGrid.innerHTML = '<p class="text-muted">まだ画像が生成されていません</p>';
+            el.historyGrid.innerHTML = '<p class="text-muted">履歴がありません</p>';
         }
         el.historyModal.classList.remove('hidden');
     });
 
     el.btnClearHist.addEventListener('click', () => {
-        if (confirm('生成履歴をすべて削除しますか？')) {
+        if (confirm('履歴をすべて削除しますか？')) {
             localStorage.removeItem(STORAGE_KEY_HISTORY);
             el.historyGrid.innerHTML = '<p class="text-muted">クリアしました</p>';
             toast('🗑 履歴を削除しました');
         }
     });
 
-    // ── Fullscreen ──
     el.resultImg.addEventListener('click', () => {
         if (el.resultImg.src) showFullscreen(el.resultImg.src);
     });
@@ -279,47 +254,31 @@ document.addEventListener('DOMContentLoaded', () => {
         toast('💾 ダウンロード開始');
     });
 
-    // ── Copy Prompt ──
     el.btnCopy.addEventListener('click', () => {
-        navigator.clipboard.writeText(el.promptEditor.value)
-            .then(() => toast('📋 コピーしました'))
-            .catch(() => {
-                // フォールバック
-                el.promptEditor.select();
-                document.execCommand('copy');
-                toast('📋 コピーしました');
-            });
+        navigator.clipboard.writeText(el.promptEditor.value).then(() => toast('📋 コピーしました'));
     });
 
-    // ── Prompt Builder ──
     function rebuildPrompt() {
         const parts = [
             'masterpiece, best quality, photorealistic, cinematic lighting, highly detailed',
             '1girl, solo, adult woman clearly over 25 years old, real human',
         ];
-
-        if (state.face)       parts.push(state.face);
-        if (state.makeup)     parts.push(state.makeup);
-        if (state.bust)       parts.push(state.bust);
-        if (state.outfit)     parts.push(state.outfit);
-        if (state.skin)       parts.push(state.skin);
-        if (state.pose)       parts.push(state.pose);
+        if (state.face) parts.push(state.face);
+        if (state.makeup) parts.push(state.makeup);
+        if (state.bust) parts.push(state.bust);
+        if (state.outfit) parts.push(state.outfit);
+        if (state.skin) parts.push(state.skin);
+        if (state.pose) parts.push(state.pose);
         if (state.expression) parts.push(state.expression);
-        if (state.location)   parts.push(state.location);
-        if (state.quality)    parts.push(state.quality);
+        if (state.location) parts.push(state.location);
+        if (state.quality) parts.push(state.quality);
 
         if (state.sexyMax) {
-            parts.push('extremely seductive provocative atmosphere');
-            parts.push('alluring sensual body lines emphasized');
-            parts.push('glistening oiled sweaty skin');
-            parts.push('barely-there micro bikini, maximum skin exposure');
-            parts.push('intimate close-up angles');
+            parts.push('extremely seductive provocative atmosphere, alluring sensual body lines emphasized, glistening oiled sweaty skin, barely-there micro bikini, maximum skin exposure, intimate close-up angles');
         }
-
         el.promptEditor.value = parts.join(', ');
     }
 
-    // ── Toast ──
     function toast(msg) {
         const t = document.createElement('div');
         t.className = 'toast';
@@ -328,6 +287,5 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 300); }, 2500);
     }
 
-    // Initial
     rebuildPrompt();
 });
